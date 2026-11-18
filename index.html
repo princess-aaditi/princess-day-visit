@@ -1,0 +1,884 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta property="og:type" content="website">
+<meta property="og:title" content="👑 Aaditi, someone is at your door">
+<meta property="og:description" content="It’s Princess Day, and Shree could not stay away. Tap to let him in.">
+<meta property="og:url" content="https://princess-aaditi.github.io/princess-day-visit/">
+<meta property="og:image" content="https://princess-aaditi.github.io/princess-day-visit/preview.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#170a19">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Princess Day Visit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: one continuous visit on a single candlelit card in a dark room. The page never changes scene; it only grows warmer as the two of them get closer. One committed look. */
+:root{
+  --bg:#170a19; --card:#2a1230; --well:#170a19; --ink:#ffe1ec; --accent:#ff9ec2; --line:#7a2e57; --on:#170a19;
+  --candle:#ffd98a; --sky:#1d1438; --dim:#7d6aa8; --spark:#ff9ec2; --good:#7fdcb5;
+  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --body:'Nunito','Trebuchet MS',Verdana,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{
+  min-height:100%;background:var(--bg);color:var(--ink);
+  font-family:var(--body);font-weight:500;font-size:17px;line-height:1.5;
+  display:flex;justify-content:center;align-items:center;
+  padding-block:16px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  overflow-x:hidden;transition:background-color 1.6s;
+}
+.glow{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity 1.5s;
+  background:radial-gradient(circle at 50% 30%, var(--candle), transparent 70%)}
+.book{position:relative;width:100%;max-width:430px}
+.ribbon{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:8px}
+.ribbon i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .5s}
+.where{font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);min-height:20px;text-align:center;margin-bottom:8px}
+.page{
+  background:var(--card);border:2px solid var(--line);border-radius:28px;
+  padding:26px 20px 24px;text-align:center;min-height:550px;
+  display:flex;flex-direction:column;justify-content:center;
+  transition:background-color 1.6s,border-color 1.6s;
+}
+.step{display:none}
+.step.on{display:block}
+h1,h2{font-family:var(--display);font-weight:600;color:var(--accent);margin:0 0 10px;line-height:1.15;text-wrap:balance}
+h1{font-size:34px}
+h2{font-size:28px}
+h1:focus,h2:focus{outline:none}
+p{margin:0 0 12px}
+.script{font-family:var(--display);font-style:italic;font-weight:500;font-size:20px;line-height:1.4}
+.big{font-size:60px;line-height:1;margin-bottom:10px}
+.btn{
+  font-family:var(--body);font-weight:800;font-size:17px;min-height:50px;padding:12px 26px;
+  border:0;border-radius:99px;cursor:pointer;background:var(--accent);color:var(--on);
+}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.next{margin-top:14px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.say{min-height:62px;margin-top:8px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.say.script{font-weight:500}
+.count{font-weight:800;color:var(--accent)}
+.row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+/* choices */
+.picks{display:flex;flex-direction:column;gap:9px;margin:12px 0 4px}
+.pick{
+  font-family:inherit;font-weight:700;font-size:17px;text-align:left;padding:11px 16px;min-height:50px;cursor:pointer;
+  background:var(--well);color:var(--ink);border:2px solid var(--line);border-radius:18px;
+}
+.pick[aria-pressed="true"],.pick.done{background:var(--accent);color:var(--on);border-color:var(--accent)}
+.pick.done{cursor:default}
+
+/* round touch targets */
+.orb{
+  width:150px;height:150px;border-radius:50%;border:2px solid var(--line);background:var(--well);
+  font-size:74px;line-height:1;padding:0;cursor:pointer;margin:8px 0 4px;
+  touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+}
+#door.knock{animation:knock .25s}
+@keyframes knock{50%{transform:translateX(-6px) rotate(-3deg)}}
+#heart{animation:beat 1.2s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}18%{transform:scale(1.12)}36%{transform:scale(1)}}
+#hug{touch-action:none}
+#hug.down{border-color:var(--accent);box-shadow:0 0 0 10px var(--line)}
+
+/* candles */
+.candle{
+  width:56px;height:76px;border-radius:16px;border:2px solid var(--line);background:var(--well);
+  font-size:36px;line-height:1;padding:0;cursor:pointer;filter:grayscale(1) brightness(.5);transition:filter .6s;
+}
+.candle.lit{filter:drop-shadow(0 0 12px var(--candle));cursor:default}
+
+/* constellation */
+.stars{position:relative;width:100%;max-width:100%;aspect-ratio:300/240;background:var(--sky);border:2px solid var(--line);border-radius:20px;margin:10px 0 6px;overflow:hidden}
+.stars svg{position:absolute;inset:0;width:100%;height:100%}
+.stars line{stroke:var(--spark);stroke-width:2;stroke-linecap:round}
+.star{
+  position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;border-radius:50%;background:transparent;
+  color:var(--dim);font-size:22px;line-height:1;padding:0;cursor:pointer;touch-action:manipulation;
+}
+.star.next{color:var(--candle);animation:twinkle .9s ease-in-out infinite alternate}
+.star.on{color:var(--spark);font-size:26px;cursor:default}
+@keyframes twinkle{from{transform:scale(.9)}to{transform:scale(1.5)}}
+
+/* meters */
+.meter{height:22px;border-radius:99px;background:var(--well);border:2px solid var(--line);overflow:hidden;margin:12px 0 4px}
+.meter i{display:block;height:100%;background:var(--accent);transition:width .6s}
+#worry{width:100%}
+#heal{width:0;background:var(--good)}
+.pct{font-weight:800;color:var(--good)}
+
+/* confessions */
+.secret{
+  font-family:var(--display);font-style:italic;font-weight:500;font-size:19px;line-height:1.3;text-align:center;
+  padding:12px 14px;min-height:56px;cursor:pointer;width:100%;
+  background:var(--well);color:var(--ink);border:2px dashed var(--line);border-radius:18px;
+}
+.secret span{display:block;filter:blur(7px);transition:filter .8s}
+.secret.shown{border-style:solid;border-color:var(--accent);cursor:default}
+.secret.shown span{filter:none}
+
+/* arenas */
+.arena{position:relative;height:240px;border:2px dashed var(--line);border-radius:20px;background:var(--well);margin:10px 0 6px;overflow:hidden}
+.germ,.kiss{
+  position:absolute;width:56px;height:56px;border-radius:50%;border:0;background:transparent;
+  font-size:36px;line-height:1;padding:0;cursor:pointer;touch-action:manipulation;
+}
+.germ{animation:bob 2.2s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(-5px) rotate(-8deg)}to{transform:translateY(5px) rotate(8deg)}}
+.kiss{top:-60px;animation:drop 4.2s linear forwards}
+.kiss.still{animation:none}
+@keyframes drop{to{top:250px}}
+
+/* love meter */
+.guess{background:var(--well);border-radius:20px;padding:14px;margin:8px 0}
+.guess label{display:block;font-weight:800;margin-bottom:6px}
+.guess input{width:100%;accent-color:var(--accent);height:36px}
+.lovenum{font-family:var(--display);font-weight:600;font-size:54px;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums;min-height:62px}
+
+/* letters */
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 4px}
+.note{
+  aspect-ratio:1/1;max-width:100%;border-radius:18px;border:2px solid var(--line);background:var(--well);
+  font-size:34px;line-height:1;cursor:pointer;padding:0;
+}
+.note.open{background:var(--card);border-style:dashed}
+.readout{min-height:96px;display:flex;align-items:center;justify-content:center;padding:6px 4px}
+
+/* lanterns */
+.nightsky{
+  position:relative;height:250px;border-radius:20px;margin:10px 0 6px;overflow:hidden;
+  background:
+    radial-gradient(circle at 12% 18%, var(--candle) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 38% 40%, var(--candle) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 66% 12%, var(--candle) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 88% 44%, var(--candle) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 26% 84%, var(--candle) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 74% 86%, var(--candle) 0 1.5px, transparent 2px),
+    var(--sky);
+}
+.lantern{
+  position:absolute;width:54px;height:54px;border:0;border-radius:50%;background:transparent;
+  font-size:38px;line-height:1;padding:0;cursor:pointer;touch-action:manipulation;
+  filter:grayscale(1) brightness(.55);transition:filter .5s, transform 2.4s ease-in, opacity 2.4s ease-in;
+}
+.lantern.lit{filter:drop-shadow(0 0 10px var(--candle));cursor:default}
+.lantern.away{transform:translateY(-300px);opacity:0}
+.lantern:focus-visible,.star:focus-visible{outline-color:var(--candle)}
+
+/* own order */
+.own{text-align:left;margin-top:8px}
+.own label{display:block;font-weight:800;margin-bottom:6px}
+.own input{
+  width:100%;font-family:inherit;font-weight:700;font-size:17px;padding:12px 14px;min-height:50px;
+  border:2px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);
+}
+.own input::placeholder{color:var(--ink);opacity:.55}
+
+/* ending */
+.scroll{border:4px double var(--accent);border-radius:20px;padding:18px 14px 16px;margin-bottom:14px}
+.orders{text-align:left;background:var(--well);border-radius:16px;padding:12px 14px;margin:12px 0}
+.orders ul{margin:6px 0 0;padding-left:20px}
+.orders li{overflow-wrap:anywhere}
+.letter{text-align:left;border-top:2px dashed var(--line);padding-top:14px;margin-top:14px}
+.letter p{font-family:var(--display);font-style:italic;font-weight:500;font-size:19px;line-height:1.5;animation:rise .9s both}
+.letter p:nth-child(2){animation-delay:.8s}
+.letter p:nth-child(3){animation-delay:1.8s}
+.letter p:nth-child(4){animation-delay:2.8s}
+.letter p:nth-child(5){animation-delay:3.8s}
+.letter p:nth-child(6){animation-delay:4.8s}
+@keyframes rise{from{opacity:.05;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sign{font-family:var(--display);font-style:italic;font-size:23px;color:var(--accent);margin-top:8px}
+.small{font-size:14px;font-weight:800;margin-top:6px}
+.fall{position:fixed;top:-40px;font-size:24px;pointer-events:none;animation:fall linear forwards;z-index:5}
+@keyframes fall{to{transform:translateY(110vh) rotate(340deg)}}
+@media (prefers-reduced-motion: reduce){
+  .germ,#heart,#door.knock,.star.next,.letter p{animation:none}
+  body,.page,.glow,.ribbon i,.meter i,.secret span,.candle,.lantern{transition:none}
+  .lantern.away{transform:none;opacity:.35}
+  .fall{display:none}
+}
+</style>
+
+<div class="glow" id="glow" aria-hidden="true"></div>
+<main class="book">
+  <div class="ribbon" aria-hidden="true"><i id="bar"></i></div>
+  <div class="where" id="where" aria-live="polite"></div>
+  <div class="page">
+
+    <section class="step on" id="s0">
+      <div class="big" aria-hidden="true">👑</div>
+      <h1>Aaditi, someone is at your door</h1>
+      <p class="script">It’s Princess Day, you’re unwell, and Shree could not stay away.</p>
+      <p>He is standing outside with his hands full. Stay in bed. Take your time. This visit is all yours.</p>
+      <button class="btn next" type="button" data-go="1">See who it is</button>
+    </section>
+
+    <section class="step" id="s1">
+      <h2>Unlock the stars</h2>
+      <p>He has put a star lock on your door, and only you can open it. Follow the glowing star, one after another.</p>
+      <div class="stars" id="stars"><svg viewBox="0 0 300 240" id="lines" aria-hidden="true"></svg></div>
+      <div class="say script" id="ssay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="n4" data-go="2" hidden>Let him in</button>
+    </section>
+
+    <section class="step" id="s2">
+      <h2>He brought you a crown</h2>
+      <p>The first thing he does is open a small velvet box. Three tiaras, because he could not choose. You can.</p>
+      <div class="picks" id="tiaras"></div>
+      <div class="say" id="tsay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="d1" data-go="3" hidden>Let him crown me</button>
+    </section>
+
+    <section class="step" id="s3">
+      <h2>Knight Shree vs the germs</h2>
+      <p>Then he looks around your room and sees what has been troubling his princess. Tap each germ and he will chase it out.</p>
+      <div class="arena" id="arena"></div>
+      <div class="count" id="gcount" aria-live="polite"></div>
+      <div class="say" id="gsay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="d2" data-go="4" hidden>See what else he brought</button>
+    </section>
+
+    <section class="step" id="s4">
+      <h2>The royal healing spell</h2>
+      <p>He rolls up his sleeves and unpacks his bag. Tap everything he brings to your bedside.</p>
+      <div class="meter" aria-hidden="true"><i id="heal"></i></div>
+      <div class="pct" id="pct" aria-live="polite"></div>
+      <div class="picks" id="cures"></div>
+      <div class="say" id="rsay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="d3" data-go="5" hidden>Look at his face</button>
+    </section>
+
+    <section class="step" id="s5">
+      <h2>Calm your knight</h2>
+      <p>He has done everything he can, and he is still worried sick. Only your promises can fix that.</p>
+      <div class="meter" aria-hidden="true"><i id="worry"></i></div>
+      <div class="count" id="wcount" aria-live="polite"></div>
+      <div class="picks" id="promises"></div>
+      <div class="say script" id="psay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="n5" data-go="6" hidden>Smile at him</button>
+    </section>
+
+    <section class="step" id="s6">
+      <h2>Catch his kisses</h2>
+      <p>You smiled, so now he is showing off. He steps back and starts blowing kisses across the room. Catch ten.</p>
+      <div class="arena" id="kisssky"></div>
+      <div class="count" id="kcount" aria-live="polite"></div>
+      <div class="say" id="ksay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="d4" data-go="7" hidden>Keep them all</button>
+    </section>
+
+    <section class="step" id="s7">
+      <h2>How much does he love you?</h2>
+      <p>He sits on the edge of your bed and asks you to guess.</p>
+      <div class="guess">
+        <label for="guess">Take a guess, princess</label>
+        <input type="range" id="guess" min="0" max="100" step="1" value="60">
+        <div class="count" id="gout" aria-live="polite"></div>
+      </div>
+      <button class="btn" type="button" id="truth">Show me the truth</button>
+      <div class="lovenum" id="lovenum" aria-live="polite"></div>
+      <div class="say" id="lsay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="d5" data-go="8" hidden>What’s in his pocket?</button>
+    </section>
+
+    <section class="step" id="s8">
+      <h2>Letters from his pocket</h2>
+      <p>He pulls out six folded notes. He wrote them on the way here and almost lost his nerve.</p>
+      <div class="notes" id="notes"></div>
+      <div class="readout script" id="readout" aria-live="polite">Tap an envelope.</div>
+      <button class="btn next" type="button" id="d6" data-go="9" hidden>Let him dim the lights</button>
+    </section>
+
+    <section class="step" id="s9">
+      <h2>Light the candles</h2>
+      <p>He turns the lights down and sets five candles around your bed. Light each one.</p>
+      <div class="row" id="candles"></div>
+      <div class="say script" id="csay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="n2" data-go="10" hidden>Make room for him</button>
+    </section>
+
+    <section class="step" id="s10">
+      <h2>Feel my heartbeat</h2>
+      <p>He sits down beside you and puts your hand on his chest. Tap along.</p>
+      <button class="orb" type="button" id="heart" aria-label="Tap the heart">💗</button>
+      <div class="say script" id="hsay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="n3" data-go="11" hidden>Ask what he’s thinking</button>
+    </section>
+
+    <section class="step" id="s11">
+      <h2>Things I never say</h2>
+      <p>With your hand still on his heart, he finally says what he usually keeps in. Touch each one to read it.</p>
+      <div class="picks" id="secrets"></div>
+      <button class="btn next" type="button" id="n6" data-go="12" hidden>Pull him closer</button>
+    </section>
+
+    <section class="step" id="s12">
+      <h2>Stay in my arms</h2>
+      <p>He stops talking and simply holds you. Press and hold. Stay as long as you can.</p>
+      <button class="orb" type="button" id="hug" aria-label="Press and hold for a hug">🫂</button>
+      <div class="count" id="hcount" aria-live="polite"></div>
+      <div class="say script" id="usay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="n7" data-go="13" hidden>Look at the window</button>
+    </section>
+
+    <section class="step" id="s13">
+      <h2>Seven wishes</h2>
+      <p>He opens your window. He brought seven lanterns, with one wish for you folded inside each. Tap a lantern to let it fly.</p>
+      <div class="nightsky" id="nightsky"></div>
+      <div class="count" id="lcount" aria-live="polite"></div>
+      <div class="say script" id="vsay" aria-live="polite"></div>
+      <button class="btn next" type="button" id="d8" data-go="14" hidden>Turn back to him</button>
+    </section>
+
+    <section class="step" id="s14">
+      <p>He takes both your hands. “Princess Day ends tonight. I don’t want it to.”</p>
+      <h2>Will you be my princess on every day after this one?</h2>
+      <div class="row" style="margin-top:18px">
+        <button class="btn" type="button" id="yes1">Yes</button>
+        <button class="btn" type="button" id="yes2">Yes, always</button>
+      </div>
+    </section>
+
+    <section class="step" id="s15">
+      <h2>Your royal orders</h2>
+      <p id="osay"></p>
+      <div class="picks" id="orders"></div>
+      <div class="own">
+        <label for="own">Or write your own order</label>
+        <input type="text" id="own" maxlength="90" autocomplete="off" placeholder="My knight must…">
+      </div>
+      <button class="btn next" type="button" data-go="16">Seal my orders</button>
+    </section>
+
+    <section class="step" id="s16">
+      <div class="scroll">
+        <div class="big" aria-hidden="true">👑</div>
+        <h1>Royal Proclamation</h1>
+        <p>On this Princess Day, <strong>Aaditi</strong> is crowned</p>
+        <p class="script" id="title"></p>
+        <p class="small" id="tally"></p>
+        <div class="orders">
+          <strong>By her command, Shree shall deliver:</strong>
+          <ul id="owed"></ul>
+        </div>
+        <div class="letter">
+          <p>My Aaditi,</p>
+          <p id="answer"></p>
+          <p>I could not really knock on your door today, so I built this visit. Every candle, every kiss and every lantern in it is something I ache to do in person.</p>
+          <p>You are the best thing that has ever happened to me. You are the calm I look for, the face I search every room for, and the one I want beside me in every version of my life.</p>
+          <p>I hate that you’re unwell and I’m far away. Heal slowly and properly, my love. Let me do the worrying until your sparkle is back.</p>
+          <p>I love you.</p>
+        </div>
+        <div class="sign">Your knight, always. Shree</div>
+        <div class="small" id="date"></div>
+      </div>
+      <p>Screenshot this and send it to him. He is waiting.</p>
+      <button class="btn ghost" type="button" id="again">Live it again</button>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(id){ return document.getElementById(id); };
+  var MOMENTS = 15, LAST = 16, cur = 0;
+
+  function setGlow(){ $('glow').style.opacity = (Math.min(cur, LAST) / LAST * 0.12 + (cur >= 9 ? lit / 5 * 0.14 : 0)).toFixed(3); }
+  function show(n){
+    var steps = document.querySelectorAll('.step');
+    for (var i = 0; i < steps.length; i++) steps[i].classList.toggle('on', steps[i].id === 's' + n);
+    cur = n;
+    $('where').textContent = (n >= 1 && n <= MOMENTS) ? 'Moment ' + n + ' of ' + MOMENTS : '';
+    $('bar').style.width = Math.min(n / LAST, 1) * 100 + '%';
+    setGlow();
+    window.scrollTo(0, 0);
+    stopKisses(); hugUp();
+    if (n === 3) buildGerms();
+    if (n === 6) startKisses();
+    if (n === LAST) finale();
+    var h = document.querySelector('#s' + n + ' h1, #s' + n + ' h2');
+    if (h){ h.setAttribute('tabindex', '-1'); h.focus({preventScroll: true}); }
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-go]');
+    if (b) show(parseInt(b.getAttribute('data-go'), 10));
+  });
+  function button(cls, text){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.textContent = text;
+    return b;
+  }
+
+  /* ---------- THE NIGHT ---------- */
+
+  /* 2: candles */
+  var candleLines = [
+    'You are the first thought of my morning.',
+    'You are the softest part of my hardest days.',
+    'You are the reason ordinary days feel worth remembering.',
+    'You are the name I say when someone asks what makes me happy.',
+    'You are home. Wherever you are, that is where it is.'
+  ];
+  var lit = 0;
+  function buildCandles(){
+    var box = $('candles'); box.textContent = ''; lit = 0;
+    $('csay').textContent = ''; $('n2').hidden = true;
+    candleLines.forEach(function(_, i){
+      var b = button('candle', '🕯️');
+      b.setAttribute('aria-label', 'Candle ' + (i + 1) + ' of ' + candleLines.length);
+      b.addEventListener('click', function(){
+        if (b.disabled) return;
+        b.disabled = true; b.classList.add('lit');
+        $('csay').textContent = candleLines[lit];
+        lit++;
+        setGlow();
+        if (lit === candleLines.length) $('n2').hidden = false;
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* 3: heartbeat */
+  var beatLines = [
+    'This is my heartbeat.',
+    'It was steady before you.',
+    'Then you smiled at me once.',
+    'It has never behaved since.',
+    'It races when your name lights up my phone.',
+    'It sinks when you are unwell.',
+    'It only settles when I know you’re okay.',
+    'It’s yours. Keep it.'
+  ];
+  var beats = 0;
+  function resetHeart(){ beats = 0; $('hsay').textContent = ''; $('n3').hidden = true; $('heart').style.animationDuration = '1.2s'; }
+  $('heart').addEventListener('click', function(){
+    if (beats >= beatLines.length) return;
+    $('hsay').textContent = beatLines[beats];
+    beats++;
+    $('heart').style.animationDuration = Math.max(1.2 - beats * 0.08, 0.55) + 's';
+    if (beats === beatLines.length) $('n3').hidden = false;
+  });
+
+  /* 4: constellation, a heart drawn star to star */
+  var pts = [[150,212],[72,140],[48,84],[88,44],[150,82],[212,44],[252,84],[228,140]];
+  var joined = 0;
+  function line(a, b){
+    var l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', a[0]); l.setAttribute('y1', a[1]); l.setAttribute('x2', b[0]); l.setAttribute('y2', b[1]);
+    $('lines').appendChild(l);
+  }
+  function buildStars(){
+    var box = $('stars'), old = box.querySelectorAll('.star');
+    for (var k = 0; k < old.length; k++) old[k].remove();
+    while ($('lines').firstChild) $('lines').removeChild($('lines').firstChild);
+    joined = 0; $('ssay').textContent = ''; $('n4').hidden = true;
+    pts.forEach(function(p, i){
+      var b = button('star' + (i === 0 ? ' next' : ''), '✦');
+      b.setAttribute('aria-label', 'Star ' + (i + 1) + ' of ' + pts.length);
+      b.style.left = (p[0] / 300 * 100) + '%'; b.style.top = (p[1] / 240 * 100) + '%';
+      b.addEventListener('click', function(){
+        if (i !== joined){ if (i > joined) $('ssay').textContent = 'Follow the glowing star.'; return; }
+        b.classList.remove('next'); b.classList.add('on');
+        if (i > 0) line(pts[i - 1], pts[i]);
+        joined++;
+        $('ssay').textContent = '';
+        var all = box.querySelectorAll('.star');
+        if (joined < pts.length){ all[joined].classList.add('next'); }
+        else {
+          line(pts[pts.length - 1], pts[0]);
+          $('ssay').textContent = 'The stars draw a heart, the lock clicks, and the door swings open. “There you are. I’ve been waiting all day.”';
+          $('n4').hidden = false;
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* 5: promises */
+  var promises = [
+    ['I promise to rest today', 'Good. The world can wait for you.'],
+    ['I promise to drink enough water', 'Every sip is a favour to me.'],
+    ['I promise to take my medicines on time', 'I will be checking. Lovingly.'],
+    ['I promise to let Shree fuss over me', 'That one I am holding you to.']
+  ];
+  var kept = 0;
+  function paintWorry(){
+    var w = Math.round((1 - kept / promises.length) * 100);
+    $('worry').style.width = w + '%';
+    $('wcount').textContent = 'Shree’s worry: ' + w + '%';
+  }
+  function buildPromises(){
+    var box = $('promises'); box.textContent = ''; kept = 0; paintWorry();
+    $('psay').textContent = ''; $('n5').hidden = true;
+    promises.forEach(function(p){
+      var b = button('pick', '🤍 ' + p[0]);
+      b.addEventListener('click', function(){
+        if (b.disabled) return;
+        b.disabled = true; b.classList.add('done'); b.textContent = '💗 ' + p[0];
+        kept++; paintWorry();
+        $('psay').textContent = kept < promises.length ? p[1] : 'Now he can breathe. Get well soon, my love.';
+        if (kept === promises.length) $('n5').hidden = false;
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* 6: secrets */
+  var secrets = [
+    'I reread your messages when I miss you.',
+    'I go quiet sometimes because I’m scared of saying the wrong thing to you.',
+    'I made all of this hoping for one smile from you.',
+    'When I picture my future, you are already in it.',
+    'I have never been this sure about anyone.'
+  ];
+  var told = 0;
+  function buildSecrets(){
+    var box = $('secrets'); box.textContent = ''; told = 0; $('n6').hidden = true;
+    secrets.forEach(function(text, i){
+      var b = button('secret', '');
+      var s = document.createElement('span'); s.textContent = text; s.setAttribute('aria-hidden', 'true');
+      b.appendChild(s);
+      b.setAttribute('aria-label', 'Hidden confession ' + (i + 1) + '. Tap to read.');
+      b.addEventListener('click', function(){
+        if (b.classList.contains('shown')) return;
+        b.classList.add('shown'); s.removeAttribute('aria-hidden'); b.setAttribute('aria-label', text);
+        told++;
+        if (told === secrets.length) $('n6').hidden = false;
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* 7: the hug */
+  var HUG = 10, hugged = 0, hugTimer = null, hugAt = 0;
+  var hugLines = [[2, 'Come here.'], [4, 'Head on my shoulder. That is your place.'], [6, 'Breathe. I’ve got you.'], [8, 'Nothing reaches you while I’m here.'], [10, 'I never want to be the first to let go.']];
+  function hugFull(){ return hugged + 0.001 >= HUG; }
+  function paintHug(){
+    var s = Math.min(Math.floor(hugged + 0.001), HUG);
+    $('hcount').textContent = 'Held for ' + s + ' of ' + HUG + ' seconds';
+    for (var i = hugLines.length - 1; i >= 0; i--){ if (hugged + 0.001 >= hugLines[i][0]){ $('usay').textContent = hugLines[i][1]; break; } }
+    if (hugFull()){ clearInterval(hugTimer); hugTimer = null; hugAt = 0; $('hug').classList.remove('down'); $('hug').textContent = '💞'; $('n7').hidden = false; }
+  }
+  function resetHug(){ hugUp(); hugged = 0; $('hug').textContent = '🫂'; $('usay').textContent = ''; $('n7').hidden = true; paintHug(); }
+  function hugDown(e){
+    if (hugFull()) return;
+    e.preventDefault(); hugAt = Date.now(); $('hug').classList.add('down');
+    clearInterval(hugTimer);
+    hugTimer = setInterval(function(){ hugged += 0.1; paintHug(); }, 100);
+  }
+  function hugUp(){
+    clearInterval(hugTimer); hugTimer = null; $('hug').classList.remove('down');
+    if (!hugAt) return;
+    var quick = Date.now() - hugAt < 350; hugAt = 0;
+    if (hugFull()) return;
+    if (quick){ hugged = Math.min(hugged + 2, HUG); paintHug(); }
+    else if (hugged > 0) $('usay').textContent = 'Don’t let go yet. Come back.';
+  }
+  $('hug').addEventListener('pointerdown', hugDown);
+  $('hug').addEventListener('pointerup', hugUp);
+  $('hug').addEventListener('pointercancel', hugUp);
+  $('hug').addEventListener('pointerleave', hugUp);
+  $('hug').addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  $('hug').addEventListener('click', function(e){ if (e.detail === 0 && !hugFull()){ hugged = Math.min(hugged + 2, HUG); paintHug(); } });
+
+  /* 8: the question, then sleep and sunrise */
+  var answer = '';
+  function sayYes(a){
+    answer = a;
+    $('osay').textContent = 'You said “' + a + '”. He kneels, grinning. “Then command me, princess.” Pick as many as you like.';
+    show(15);
+  }
+  $('yes1').addEventListener('click', function(){ sayYes('Yes'); });
+  $('yes2').addEventListener('click', function(){ sayYes('Yes, always'); });
+
+  /* ---------- PRINCESS DAY ---------- */
+
+  /* 9: tiara */
+  var tiaras = [
+    ['🌸 The blossom tiara', 'Princess of Soft Hearts', 'Gentle, and impossible not to adore.'],
+    ['✨ The starlight tiara', 'Princess of Sparkle', 'He says the stars on your door were jealous.'],
+    ['🌙 The moon tiara', 'Princess of Sweet Dreams', 'For a princess who needs her rest.']
+  ];
+  var crowned = '';
+  function buildTiaras(){
+    var box = $('tiaras'); box.textContent = ''; crowned = '';
+    $('tsay').textContent = ''; $('d1').hidden = true;
+    tiaras.forEach(function(t){
+      var b = button('pick', t[0]);
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function(){
+        var all = box.querySelectorAll('button');
+        for (var k = 0; k < all.length; k++) all[k].setAttribute('aria-pressed', 'false');
+        b.setAttribute('aria-pressed', 'true');
+        crowned = t[1];
+        $('tsay').textContent = t[1] + '. ' + t[2];
+        $('d1').hidden = false;
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* 10: germs */
+  var spots = [[8,10],[40,6],[72,12],[20,40],[56,38],[78,52],[6,66],[42,68]];
+  var cheers = [
+    'One down! How dare it.',
+    'Out of the kingdom, you.',
+    'Nobody troubles my princess.',
+    'That one ran away crying.',
+    'Shree is not even tired.',
+    'Almost clear, Your Highness.',
+    'One left. It looks scared.',
+    'All gone. He would fight a thousand more for you.'
+  ];
+  var left = 0;
+  function buildGerms(){
+    var arena = $('arena'); arena.textContent = '';
+    left = spots.length;
+    $('gcount').textContent = 'Germs left: ' + left;
+    $('gsay').textContent = ''; $('d2').hidden = true;
+    spots.forEach(function(p, i){
+      var g = button('germ', '🦠');
+      g.setAttribute('aria-label', 'Germ ' + (i + 1));
+      g.style.left = p[0] + '%'; g.style.top = p[1] + '%';
+      g.style.animationDelay = (i * 0.27) + 's';
+      g.addEventListener('click', function(){
+        if (g.disabled) return;
+        g.disabled = true; g.textContent = '💥'; g.style.animation = 'none';
+        left--;
+        $('gcount').textContent = left ? 'Germs left: ' + left : 'Germ-free!';
+        $('gsay').textContent = cheers[spots.length - left - 1];
+        setTimeout(function(){ g.remove(); }, 320);
+        if (left === 0) $('d2').hidden = false;
+      });
+      arena.appendChild(g);
+    });
+  }
+
+  /* 11: healing, his turn to look after her */
+  var cures = [
+    ['🍲 Soup he made himself', 'A little too much salt. A lot of love.'],
+    ['🍯 Honey and ginger tea', 'Sip slowly. He is watching the cup.'],
+    ['🧣 A blanket, tucked in properly', 'Corners and all. You are not going anywhere.'],
+    ['🎶 Your favourite song, played softly', 'He will hum along, badly.'],
+    ['🌸 Fresh flowers by your bed', 'So the first thing you see is something pretty. After him.']
+  ];
+  var healed = 0;
+  function buildCures(){
+    var box = $('cures'); box.textContent = ''; healed = 0;
+    $('heal').style.width = '0'; $('pct').textContent = 'Recovery: 0%';
+    $('rsay').textContent = ''; $('d3').hidden = true;
+    cures.forEach(function(c){
+      var b = button('pick', c[0]);
+      b.addEventListener('click', function(){
+        if (b.disabled) return;
+        b.disabled = true; b.classList.add('done');
+        healed++;
+        var p = Math.round(healed / cures.length * 100);
+        $('heal').style.width = p + '%';
+        $('pct').textContent = 'Recovery: ' + p + '%';
+        $('rsay').textContent = healed < cures.length ? c[1] : 'Spell complete. Get well soon, my princess.';
+        if (healed === cures.length) $('d3').hidden = false;
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* 12: kisses */
+  var KISSES = 10, caught = 0, kissTimer = null;
+  var kissLines = {
+    1: 'The first one always lands on your forehead.',
+    3: 'That one was for your nose.',
+    5: 'Halfway. He is not slowing down.',
+    8: 'Greedy princess. He approves.',
+    10: 'Ten caught. He has thousands more saved for you.'
+  };
+  function catchKiss(k){
+    if (k.disabled || caught >= KISSES) return;
+    k.disabled = true; k.textContent = '💗'; k.style.animationPlayState = 'paused';
+    caught++;
+    $('kcount').textContent = 'Kisses caught: ' + caught + ' of ' + KISSES;
+    if (kissLines[caught]) $('ksay').textContent = kissLines[caught];
+    setTimeout(function(){ k.remove(); }, 300);
+    if (caught >= KISSES){ stopKisses(); $('kisssky').textContent = ''; $('d4').hidden = false; }
+  }
+  function spawnKiss(i){
+    var k = button('kiss', '💋');
+    k.setAttribute('aria-label', 'A kiss');
+    if (reduce){
+      k.classList.add('still');
+      k.style.left = (4 + (i % 5) * 19) + '%'; k.style.top = (i < 5 ? 24 : 130) + 'px';
+    } else {
+      k.style.left = (4 + Math.random() * 74) + '%';
+      k.addEventListener('animationend', function(){ k.remove(); });
+    }
+    k.addEventListener('click', function(){ catchKiss(k); });
+    $('kisssky').appendChild(k);
+  }
+  function startKisses(){
+    stopKisses();
+    caught = 0; $('kisssky').textContent = ''; $('d4').hidden = true; $('ksay').textContent = '';
+    $('kcount').textContent = 'Kisses caught: 0 of ' + KISSES;
+    if (reduce){ for (var i = 0; i < KISSES; i++) spawnKiss(i); return; }
+    spawnKiss(0);
+    kissTimer = setInterval(function(){ spawnKiss(0); }, 800);
+  }
+  function stopKisses(){ if (kissTimer){ clearInterval(kissTimer); kissTimer = null; } }
+
+  /* 13: love meter */
+  var loveTimer = null;
+  function paintGuess(){ $('gout').textContent = 'Your guess: ' + $('guess').value + '%'; }
+  function resetLove(){
+    clearInterval(loveTimer);
+    $('guess').value = 60; $('guess').disabled = false; paintGuess();
+    $('truth').hidden = false; $('lovenum').textContent = ''; $('lsay').textContent = ''; $('d5').hidden = true;
+  }
+  function endLove(){
+    $('lovenum').textContent = '∞';
+    $('lsay').textContent = 'The meter broke. He loves you more than it can count.';
+    $('d5').hidden = false;
+  }
+  $('guess').addEventListener('input', paintGuess);
+  $('truth').addEventListener('click', function(){
+    $('truth').hidden = true; $('guess').disabled = true;
+    var v = parseInt($('guess').value, 10);
+    $('lsay').textContent = v >= 100 ? 'Bold guess. Still too low.' : 'Too low, princess. Watch.';
+    if (reduce){ endLove(); return; }
+    clearInterval(loveTimer);
+    loveTimer = setInterval(function(){
+      v += Math.max(7, Math.round(v * 0.12));
+      if (v >= 100000){ clearInterval(loveTimer); endLove(); return; }
+      $('lovenum').textContent = v.toLocaleString('en-IN') + '%';
+    }, 70);
+  });
+
+  /* 14: letters */
+  var letters = [
+    'You walk in and the whole room gets better. I have watched it happen.',
+    'Your smile is my favourite thing to earn.',
+    'Even sick and sleepy, you are the prettiest one in the kingdom.',
+    'I’m proud of you, more than I manage to say out loud.',
+    'The kingdom is dull without your laugh. Come back to it soon.',
+    'Being loved by you is the luckiest thing that has happened to me.'
+  ];
+  var opened = 0;
+  function buildNotes(){
+    var box = $('notes'); box.textContent = ''; opened = 0;
+    $('readout').textContent = 'Tap an envelope.'; $('d6').hidden = true;
+    letters.forEach(function(text, i){
+      var b = button('note', '💌');
+      b.setAttribute('aria-label', 'Letter ' + (i + 1) + ' of ' + letters.length);
+      b.addEventListener('click', function(){
+        $('readout').textContent = text;
+        if (b.classList.contains('open')) return;
+        b.classList.add('open'); b.textContent = '💗';
+        opened++;
+        if (opened === letters.length) $('d6').hidden = false;
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* 16: lanterns */
+  var wishes = [
+    'I wish you a pain-free, easy tomorrow.',
+    'I wish you sleep so deep that you wake up smiling.',
+    'I wish every dream you are chasing finds its way to you.',
+    'I wish you never doubt how loved you are.',
+    'I wish you laughter, loud and often.',
+    'I wish to be the one beside you through all of it.',
+    'My last wish is the simplest. You, always.'
+  ];
+  var lanternSpots = [[4,56],[17,20],[31,60],[44,12],[56,54],[69,22],[80,60]];
+  var flown = 0;
+  function buildLanterns(){
+    var sky = $('nightsky'); sky.textContent = ''; flown = 0;
+    $('lcount').textContent = 'Lanterns released: 0 of ' + wishes.length;
+    $('vsay').textContent = ''; $('d8').hidden = true;
+    lanternSpots.forEach(function(p, i){
+      var b = button('lantern', '🏮');
+      b.setAttribute('aria-label', 'Lantern ' + (i + 1) + ' of ' + wishes.length);
+      b.style.left = p[0] + '%'; b.style.top = p[1] + '%';
+      b.addEventListener('click', function(){
+        if (b.disabled) return;
+        b.disabled = true; b.classList.add('lit');
+        setTimeout(function(){ b.classList.add('away'); }, 500);
+        $('vsay').textContent = wishes[flown];
+        flown++;
+        $('lcount').textContent = 'Lanterns released: ' + flown + ' of ' + wishes.length;
+        if (flown === wishes.length){ $('vsay').textContent = wishes[flown - 1] + ' All seven are on their way to the stars you joined.'; $('d8').hidden = false; }
+      });
+      sky.appendChild(b);
+    });
+  }
+
+  /* 17: orders */
+  var orders = [
+    '📞 A long call tonight',
+    '🍜 My favourite food, once I’m better',
+    '🎬 A movie night, my pick',
+    '🌹 Flowers, real ones this time',
+    '🤗 Unlimited hugs'
+  ];
+  var chosen = {};
+  function buildOrders(){
+    var box = $('orders'); box.textContent = ''; chosen = {}; $('own').value = '';
+    orders.forEach(function(text, i){
+      var b = button('pick', text);
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function(){
+        var on = b.getAttribute('aria-pressed') !== 'true';
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        chosen[i] = on;
+      });
+      box.appendChild(b);
+    });
+  }
+
+  /* ending */
+  function add(ul, text){ var li = document.createElement('li'); li.textContent = text; ul.appendChild(li); }
+  function finale(){
+    $('title').textContent = crowned || 'Princess of Soft Hearts';
+    $('tally').textContent = 'Candles lit: ' + lit + '. Stars joined: ' + joined + '. Germs defeated: ' + spots.length + '. Kisses caught: ' + caught + '. Lanterns released: ' + flown + '.';
+    var ul = $('owed'); ul.textContent = '';
+    orders.forEach(function(text, i){ if (chosen[i]) add(ul, text); });
+    var own = $('own').value.trim();
+    if (own) add(ul, '👑 Her own order: ' + own);
+    if (!ul.children.length) add(ul, '💗 Whatever she asks for, whenever she asks');
+    add(ul, '🛡️ One knight, on duty until she is fully well');
+    $('answer').textContent = 'You said “' + (answer || 'Yes') + '”. I will hear those words every day from now on.';
+    var d = new Date(), m = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    $('date').textContent = 'Sealed on ' + d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+    if (reduce) return;
+    var bits = ['👑','💗','✨','🌸','🏮'];
+    for (var i = 0; i < 40; i++){
+      (function(i){
+        var s = document.createElement('span');
+        s.className = 'fall'; s.setAttribute('aria-hidden', 'true');
+        s.textContent = bits[i % bits.length];
+        s.style.left = (Math.random() * 96) + 'vw';
+        s.style.animationDuration = (3 + Math.random() * 2.6) + 's';
+        s.style.animationDelay = (Math.random() * 1.6) + 's';
+        document.body.appendChild(s);
+        setTimeout(function(){ s.remove(); }, 8000);
+      })(i);
+    }
+  }
+
+  function reset(){
+    buildCandles(); resetHeart(); buildStars(); buildPromises(); buildSecrets(); resetHug();
+    buildTiaras(); buildCures(); resetLove(); buildNotes(); buildLanterns(); buildOrders();
+    caught = 0; answer = '';
+  }
+  $('again').addEventListener('click', function(){ reset(); show(0); });
+  reset(); show(0);
+})();
+</script>
+
+</body></html>
